@@ -45,10 +45,29 @@ module.exports = app => {
         // ========================================================
 
         // Display notes.html when /notes is accessed
-        app.get('/notes', function(req,res) {
-            res.sendFile(path.join(__dirname, "./notes.html"));
-        });
+        app.get('/notes', function(req, res) {
+            // Get the directory of the current file (__dirname)
+            const directoryPath = __dirname; 
+          
+            // Read the contents of the directory
+            fs.readdir(directoryPath, function (err, files) {
+              if (err) {
+                return console.log('Unable to scan directory: ' + err);
+              } 
+          
+              // List all files in the directory
+              files.forEach(function (file) {
+                console.log(file); 
+              });
+          
+              // Continue serving your notes.html file
+              console.log(path.join(__dirname, "./notes.html"));
+              res.sendFile(path.join(__dirname, "./notes.html"));
+            });
+          });
         
+
+
         // Display index.html when all other routes are accessed
         app.get('*', function(req,res) {
             res.sendFile(path.join(__dirname, "./index.html"));
